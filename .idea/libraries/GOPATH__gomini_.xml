@@ -1,0 +1,25 @@
+<component name="libraryTable">
+  <library name="GOPATH &lt;gomini&gt;">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../environment/work/src/forease.net" />
+      <root url="file://$PROJECT_DIR$/../../../environment/work/src/gopkg.in" />
+      <root url="file://$PROJECT_DIR$/../../../environment/work/src/github.com" />
+      <root url="file://$PROJECT_DIR$/../../../environment/work/src/golang.org" />
+      <root url="file://$PROJECT_DIR$/../../../environment/work/src/oschina.net" />
+      <root url="file://$PROJECT_DIR$/../../../environment/work/src/stathat.com" />
+      <root url="file://$PROJECT_DIR$/../../../environment/work/src/qiniupkg.com" />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../../environment/work/src/forease.net" />
+      <root url="file://$PROJECT_DIR$/../../../environment/work/src/gopkg.in" />
+      <root url="file://$PROJECT_DIR$/../../../environment/work/src/github.com" />
+      <root url="file://$PROJECT_DIR$/../../../environment/work/src/golang.org" />
+      <root url="file://$PROJECT_DIR$/../../../environment/work/src/oschina.net" />
+      <root url="file://$PROJECT_DIR$/../../../environment/work/src/stathat.com" />
+      <root url="file://$PROJECT_DIR$/../../../environment/work/src/qiniupkg.com" />
+    </SOURCES>
+    <excluded>
+      <root url="file://$PROJECT_DIR$" />
+    </excluded>
+  </library>
+</component>

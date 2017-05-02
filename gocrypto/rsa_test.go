@@ -3,18 +3,20 @@ package gocrypto
 
 import (
 	"encoding/hex"
-	"fmt"
 	"testing"
 )
 
 func TestRSADecrypt(t *testing.T) {
-	GenRsaKey(1024)
-	e, err := RSAEncrypt([]byte("hello world"))
+	err := GenRsaKey(1024)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var pass = "hello world"
+	e, err := RSAEncrypt([]byte(pass))
 	if err != nil {
 		t.Fatal(err)
 	}
 	s := hex.EncodeToString(e)
-	fmt.Println(s)
 	es, err := hex.DecodeString(s)
 	if err != nil {
 		t.Fatal(err)
@@ -27,6 +29,4 @@ func TestRSADecrypt(t *testing.T) {
 		t.Log(string(d))
 		t.FailNow()
 	}
-	fmt.Println(string(d))
-
 }

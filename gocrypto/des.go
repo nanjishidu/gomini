@@ -2,120 +2,236 @@
 package gocrypto
 
 import (
-	"bytes"
 	"crypto/cipher"
 	"crypto/des"
+	"crypto/rand"
+	"errors"
+	"fmt"
+	"io"
 	"sync"
 )
 
 var (
-	syncDesMutex                 sync.Mutex
-	commonDeskey, commonDesIvkey []byte
+	syncDesMutex sync.Mutex
+	commonDeskey []byte
 )
 
-func SetDesKey(key string, ivkey ...string) {
+func SetDesKey(key string) error {
 	syncDesMutex.Lock()
 	defer syncDesMutex.Unlock()
-	commonDeskey = []byte(key)
-	if len(ivkey) > 0 {
-		commonDesIvkey = []byte(ivkey[0])
-	} else {
-		commonDesIvkey = []byte(key)
+	b := []byte(key)
+	if len(b) == 8 || len(b) == 24 {
+		commonDeskey = b
+		return nil
 	}
+	return errors.New(fmt.Sprintf("key size is not 8 or 24, but %d",
+		len(b)))
 }
 
-func DesEncrypt(origData []byte, zeroPadding ...bool) ([]byte, error) {
+func DesCBCEncrypt(plaintext []byte, paddingType ...string) (ciphertext []byte,
+	err error) {
 	block, err := des.NewCipher(commonDeskey)
 	if err != nil {
 		return nil, err
 	}
-	if len(zeroPadding) > 0 && zeroPadding[0] == true {
-		origData = ZeroPadding(origData, block.BlockSize())
+	if len(paddingType) > 0 {
+		switch paddingType[0] {
+		case "ZeroPadding":
+			plaintext = ZeroPadding(plaintext, des.BlockSize)
+		case "PKCS5Padding":
+			plaintext = PKCS5Padding(plaintext, des.BlockSize)
+		}
 	} else {
-		origData = PKCS5Padding(origData, block.BlockSize())
+		plaintext = PKCS5Padding(plaintext, des.BlockSize)
 	}
-
-	blockMode := cipher.NewCBCEncrypter(block, commonDesIvkey)
-	crypted := make([]byte, len(origData))
-	// 根据CryptBlocks方法的说明，如下方式初始化crypted也可以
-	// crypted := origData
-	blockMode.CryptBlocks(crypted, origData)
-	return crypted, nil
+	ciphertext = make([]byte, des.BlockSize+len(plaintext))
+	iv := ciphertext[:des.BlockSize]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		return nil, err
+	}
+	cipher.NewCBCEncrypter(block, iv).CryptBlocks(ciphertext[des.BlockSize:],
+		plaintext)
+	return ciphertext, nil
 }
 
-func DesDecrypt(crypted []byte, zeroPadding ...bool) ([]byte, error) {
+func DesCBCDecrypt(ciphertext []byte, paddingType ...string) (plaintext []byte,
+	err error) {
+	if len(ciphertext) < des.BlockSize {
+		return nil, errors.New("ciphertext too short")
+	}
 	block, err := des.NewCipher(commonDeskey)
 	if err != nil {
 		return nil, err
 	}
-	blockMode := cipher.NewCBCDecrypter(block, commonDesIvkey)
-	origData := make([]byte, len(crypted))
-	// origData := crypted
-	blockMode.CryptBlocks(origData, crypted)
-	if len(zeroPadding) > 0 && zeroPadding[0] == true {
-		origData = ZeroUnPadding(origData)
+	iv := ciphertext[:des.BlockSize]
+	ciphertext = ciphertext[des.BlockSize:]
+	cipher.NewCBCDecrypter(block, iv).CryptBlocks(ciphertext, ciphertext)
+	if len(paddingType) > 0 {
+		switch paddingType[0] {
+		case "ZeroUnPadding":
+			plaintext = ZeroUnPadding(ciphertext)
+		case "PKCS5UnPadding":
+			plaintext = PKCS5UnPadding(ciphertext)
+		}
 	} else {
-		origData = PKCS5UnPadding(origData)
+		plaintext = PKCS5UnPadding(ciphertext)
 	}
-	return origData, nil
+	return plaintext, nil
 }
 
 // 3DES加密
-func TripleDesEncrypt(origData []byte, zeroPadding ...bool) ([]byte, error) {
+func TripleDesCBCEncrypt(plaintext []byte, paddingType ...string) (ciphertext []byte,
+	err error) {
 	block, err := des.NewTripleDESCipher(commonDeskey)
 	if err != nil {
 		return nil, err
 	}
-	if len(zeroPadding) > 0 && zeroPadding[0] == true {
-		origData = ZeroPadding(origData, block.BlockSize())
+	if len(paddingType) > 0 {
+		switch paddingType[0] {
+		case "ZeroPadding":
+			plaintext = ZeroPadding(plaintext, des.BlockSize)
+		case "PKCS5Padding":
+			plaintext = PKCS5Padding(plaintext, des.BlockSize)
+		}
 	} else {
-		origData = PKCS5Padding(origData, block.BlockSize())
+		plaintext = PKCS5Padding(plaintext, des.BlockSize)
 	}
-	blockMode := cipher.NewCBCEncrypter(block, commonDesIvkey[:8])
-	crypted := make([]byte, len(origData))
-	blockMode.CryptBlocks(crypted, origData)
-	return crypted, nil
+	ciphertext = make([]byte, des.BlockSize+len(plaintext))
+	iv := ciphertext[:des.BlockSize]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		return nil, err
+	}
+	cipher.NewCBCEncrypter(block, iv).CryptBlocks(ciphertext[des.BlockSize:],
+		plaintext)
+	return ciphertext, nil
 }
 
 // 3DES解密
-func TripleDesDecrypt(crypted []byte, zeroPadding ...bool) ([]byte, error) {
+func TripleDesCBCDecrypt(ciphertext []byte, paddingType ...string) (plaintext []byte,
+	err error) {
+	if len(ciphertext) < des.BlockSize {
+		return nil, errors.New("ciphertext too short")
+	}
 	block, err := des.NewTripleDESCipher(commonDeskey)
 	if err != nil {
 		return nil, err
 	}
-	blockMode := cipher.NewCBCDecrypter(block, commonDesIvkey[:8])
-	origData := make([]byte, len(crypted))
-	// origData := crypted
-	blockMode.CryptBlocks(origData, crypted)
-	if len(zeroPadding) > 0 && zeroPadding[0] == true {
-		origData = ZeroUnPadding(origData)
+	iv := ciphertext[:des.BlockSize]
+	ciphertext = ciphertext[des.BlockSize:]
+	cipher.NewCBCDecrypter(block, iv).CryptBlocks(ciphertext, ciphertext)
+	if len(paddingType) > 0 {
+		switch paddingType[0] {
+		case "ZeroUnPadding":
+			plaintext = ZeroUnPadding(ciphertext)
+		case "PKCS5UnPadding":
+			plaintext = PKCS5UnPadding(ciphertext)
+		}
 	} else {
-		origData = PKCS5UnPadding(origData)
+		plaintext = PKCS5UnPadding(ciphertext)
 	}
-	return origData, nil
+	return plaintext, nil
 }
 
-func ZeroPadding(ciphertext []byte, blockSize int) []byte {
-	padding := blockSize - len(ciphertext)%blockSize
-	padtext := bytes.Repeat([]byte{0}, padding)
-	return append(ciphertext, padtext...)
+func DesCFBEncrypt(plaintext []byte, paddingType ...string) (ciphertext []byte,
+	err error) {
+	block, err := des.NewCipher(commonDeskey)
+	if err != nil {
+		return nil, err
+	}
+	if len(paddingType) > 0 {
+		switch paddingType[0] {
+		case "ZeroPadding":
+			plaintext = ZeroPadding(plaintext, des.BlockSize)
+		case "PKCS5Padding":
+			plaintext = PKCS5Padding(plaintext, des.BlockSize)
+		}
+	} else {
+		plaintext = PKCS5Padding(plaintext, des.BlockSize)
+	}
+	ciphertext = make([]byte, des.BlockSize+len(plaintext))
+	iv := ciphertext[:des.BlockSize]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		return nil, err
+	}
+	cipher.NewCFBEncrypter(block, iv).XORKeyStream(ciphertext[des.BlockSize:],
+		plaintext)
+	return ciphertext, nil
 }
 
-func ZeroUnPadding(origData []byte) []byte {
-	return bytes.TrimRightFunc(origData, func(r rune) bool {
-		return r == rune(0)
-	})
+func DesCFBDecrypt(ciphertext []byte, paddingType ...string) (plaintext []byte,
+	err error) {
+	if len(ciphertext) < des.BlockSize {
+		return nil, errors.New("ciphertext too short")
+	}
+	block, err := des.NewCipher(commonDeskey)
+	if err != nil {
+		return nil, err
+	}
+	iv := ciphertext[:des.BlockSize]
+	ciphertext = ciphertext[des.BlockSize:]
+	cipher.NewCFBDecrypter(block, iv).XORKeyStream(ciphertext, ciphertext)
+	if len(paddingType) > 0 {
+		switch paddingType[0] {
+		case "ZeroUnPadding":
+			plaintext = ZeroUnPadding(ciphertext)
+		case "PKCS5UnPadding":
+			plaintext = PKCS5UnPadding(ciphertext)
+		}
+	} else {
+		plaintext = PKCS5UnPadding(ciphertext)
+	}
+	return plaintext, nil
 }
 
-func PKCS5Padding(ciphertext []byte, blockSize int) []byte {
-	padding := blockSize - len(ciphertext)%blockSize
-	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
-	return append(ciphertext, padtext...)
+// 3DES加密
+func TripleDesCFBEncrypt(plaintext []byte, paddingType ...string) (ciphertext []byte,
+	err error) {
+	block, err := des.NewTripleDESCipher(commonDeskey)
+	if err != nil {
+		return nil, err
+	}
+	if len(paddingType) > 0 {
+		switch paddingType[0] {
+		case "ZeroPadding":
+			plaintext = ZeroPadding(plaintext, des.BlockSize)
+		case "PKCS5Padding":
+			plaintext = PKCS5Padding(plaintext, des.BlockSize)
+		}
+	} else {
+		plaintext = PKCS5Padding(plaintext, des.BlockSize)
+	}
+	ciphertext = make([]byte, des.BlockSize+len(plaintext))
+	iv := ciphertext[:des.BlockSize]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		return nil, err
+	}
+	cipher.NewCFBEncrypter(block, iv).XORKeyStream(ciphertext[des.BlockSize:],
+		plaintext)
+	return ciphertext, nil
 }
 
-func PKCS5UnPadding(origData []byte) []byte {
-	length := len(origData)
-	// 去掉最后一个字节 unpadding 次
-	unpadding := int(origData[length-1])
-	return origData[:(length - unpadding)]
+// 3DES解密
+func TripleDesCFBDecrypt(ciphertext []byte, paddingType ...string) (plaintext []byte,
+	err error) {
+	if len(ciphertext) < des.BlockSize {
+		return nil, errors.New("ciphertext too short")
+	}
+	block, err := des.NewTripleDESCipher(commonDeskey)
+	if err != nil {
+		return nil, err
+	}
+	iv := ciphertext[:des.BlockSize]
+	ciphertext = ciphertext[des.BlockSize:]
+	cipher.NewCFBDecrypter(block, iv).XORKeyStream(ciphertext, ciphertext)
+	if len(paddingType) > 0 {
+		switch paddingType[0] {
+		case "ZeroUnPadding":
+			plaintext = ZeroUnPadding(ciphertext)
+		case "PKCS5UnPadding":
+			plaintext = PKCS5UnPadding(ciphertext)
+		}
+	} else {
+		plaintext = PKCS5UnPadding(ciphertext)
+	}
+	return plaintext, nil
 }

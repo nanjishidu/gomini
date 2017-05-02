@@ -1,13 +1,13 @@
-// md5.go
 package gocrypto
 
 import (
-	"crypto/md5"
-	"encoding/hex"
+"encoding/hex"
+	"crypto/sha256"
 )
 
-func Md5(key string) string {
-	h := md5.New()
+func Sha256(key string) string {
+	h := sha256.New()
 	h.Write([]byte(key))
 	return hex.EncodeToString(h.Sum(nil))
 }
+
