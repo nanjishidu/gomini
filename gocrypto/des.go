@@ -29,7 +29,7 @@ func DesEncrypt(origData []byte, zeroPadding ...bool) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if len(zeroPadding) > 0 && zeroPadding == true {
+	if len(zeroPadding) > 0 && zeroPadding[0] == true {
 		origData = ZeroPadding(origData, block.BlockSize())
 	} else {
 		origData = PKCS5Padding(origData, block.BlockSize())
@@ -52,7 +52,7 @@ func DesDecrypt(crypted []byte, zeroPadding ...bool) ([]byte, error) {
 	origData := make([]byte, len(crypted))
 	// origData := crypted
 	blockMode.CryptBlocks(origData, crypted)
-	if len(zeroPadding) > 0 && zeroPadding == true {
+	if len(zeroPadding) > 0 && zeroPadding[0] == true {
 		origData = ZeroUnPadding(origData)
 	} else {
 		origData = PKCS5UnPadding(origData)
@@ -66,7 +66,7 @@ func TripleDesEncrypt(origData []byte, zeroPadding ...bool) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if len(zeroPadding) > 0 && zeroPadding == true {
+	if len(zeroPadding) > 0 && zeroPadding[0] == true {
 		origData = ZeroPadding(origData, block.BlockSize())
 	} else {
 		origData = PKCS5Padding(origData, block.BlockSize())
@@ -87,7 +87,7 @@ func TripleDesDecrypt(crypted []byte, zeroPadding ...bool) ([]byte, error) {
 	origData := make([]byte, len(crypted))
 	// origData := crypted
 	blockMode.CryptBlocks(origData, crypted)
-	if len(zeroPadding) > 0 && zeroPadding == true {
+	if len(zeroPadding) > 0 && zeroPadding[0] == true {
 		origData = ZeroUnPadding(origData)
 	} else {
 		origData = PKCS5UnPadding(origData)
