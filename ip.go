@@ -33,7 +33,8 @@ func GetIpAddrs(ipaddr, mask string, ok bool) (ipNetmask *IpNetmask, ipRangeAddr
 	if strings.Contains(mask, ".") {
 		netmask = Ip2long(mask)
 	} else {
-		netmask = 0xffffffff << (32 - GetStrUint(mask))
+		umask, _ := GetStrUint(mask)
+		netmask = 0xffffffff << (32 - umask)
 	}
 	ipNetmask = new(IpNetmask)
 	if Long2ip(netmask) == "255.255.255.254" || Long2ip(netmask) == "255.255.255.250" {
