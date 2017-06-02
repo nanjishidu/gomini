@@ -66,6 +66,9 @@ func DesCBCDecrypt(ciphertext []byte, paddingType ...string) (plaintext []byte,
 	iv := ciphertext[:des.BlockSize]
 	ciphertext = ciphertext[des.BlockSize:]
 	cipher.NewCBCDecrypter(block, iv).CryptBlocks(ciphertext, ciphertext)
+	if int(ciphertext[len(ciphertext)-1]) > len(ciphertext) {
+		return nil, errors.New("des decrypt failed")
+	}
 	if len(paddingType) > 0 {
 		switch paddingType[0] {
 		case "ZeroUnPadding":
@@ -119,6 +122,9 @@ func TripleDesCBCDecrypt(ciphertext []byte, paddingType ...string) (plaintext []
 	iv := ciphertext[:des.BlockSize]
 	ciphertext = ciphertext[des.BlockSize:]
 	cipher.NewCBCDecrypter(block, iv).CryptBlocks(ciphertext, ciphertext)
+	if int(ciphertext[len(ciphertext)-1]) > len(ciphertext) {
+		return nil, errors.New("aes decrypt failed")
+	}
 	if len(paddingType) > 0 {
 		switch paddingType[0] {
 		case "ZeroUnPadding":
@@ -170,6 +176,9 @@ func DesCFBDecrypt(ciphertext []byte, paddingType ...string) (plaintext []byte,
 	iv := ciphertext[:des.BlockSize]
 	ciphertext = ciphertext[des.BlockSize:]
 	cipher.NewCFBDecrypter(block, iv).XORKeyStream(ciphertext, ciphertext)
+	if int(ciphertext[len(ciphertext)-1]) > len(ciphertext) {
+		return nil, errors.New("aes decrypt failed")
+	}
 	if len(paddingType) > 0 {
 		switch paddingType[0] {
 		case "ZeroUnPadding":
@@ -223,6 +232,9 @@ func TripleDesCFBDecrypt(ciphertext []byte, paddingType ...string) (plaintext []
 	iv := ciphertext[:des.BlockSize]
 	ciphertext = ciphertext[des.BlockSize:]
 	cipher.NewCFBDecrypter(block, iv).XORKeyStream(ciphertext, ciphertext)
+	if int(ciphertext[len(ciphertext)-1]) > len(ciphertext) {
+		return nil, errors.New("aes decrypt failed")
+	}
 	if len(paddingType) > 0 {
 		switch paddingType[0] {
 		case "ZeroUnPadding":

@@ -67,6 +67,9 @@ func AesCFBDecrypt(ciphertext []byte, paddingType ...string) (plaintext []byte,
 	iv := ciphertext[:aes.BlockSize]
 	ciphertext = ciphertext[aes.BlockSize:]
 	cipher.NewCFBDecrypter(block, iv).XORKeyStream(ciphertext, ciphertext)
+	if int(ciphertext[len(ciphertext)-1]) > len(ciphertext) {
+		return nil, errors.New("aes decrypt failed")
+	}
 	if len(paddingType) > 0 {
 		switch paddingType[0] {
 		case "ZeroUnPadding":
@@ -117,6 +120,9 @@ func AesCBCDecrypt(ciphertext []byte, paddingType ...string) (plaintext []byte,
 	iv := ciphertext[:aes.BlockSize]
 	ciphertext = ciphertext[aes.BlockSize:]
 	cipher.NewCBCDecrypter(block, iv).CryptBlocks(ciphertext, ciphertext)
+	if int(ciphertext[len(ciphertext)-1]) > len(ciphertext) {
+		return nil, errors.New("aes decrypt failed")
+	}
 	if len(paddingType) > 0 {
 		switch paddingType[0] {
 		case "ZeroUnPadding":
