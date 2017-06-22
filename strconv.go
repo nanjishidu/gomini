@@ -15,7 +15,7 @@ func GetStrFloat(strv string, def ...float64) (float64, error) {
 	if len(strv) == 0 && len(def) > 0 {
 		return def[0], nil
 	}
-	return strconv.ParseFloat(strv, 64)
+	return strconv.ParseFloat(strv, 32)
 }
 
 func GetStrUint(strv string, def ...uint) (uint, error) {
