@@ -45,11 +45,12 @@ func CmdRunWithTimeout(cmd *exec.Cmd, timeout time.Duration) (error, bool) {
 	select {
 	case <-time.After(timeout):
 		// timeout
-		if err = cmd.Process.Kill(); err != nil {
-			//log.Error("failed to kill: %s, error: %s", cmd.Path, err)
-		}
 		<-done
-		return err, true
+		err := cmd.Process.Kill()
+		if err != nil {
+			return err, true
+		}
+		return nil, true
 	case err = <-done:
 		return err, false
 	}
