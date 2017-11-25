@@ -22,13 +22,16 @@ func TestAesCFBDecrypt(t *testing.T) {
 		t.Fatal(err)
 	}
 	sd, err := AesCFBDecrypt(sed)
+	if err != nil {
+		t.Fatal(err)
+	}
 	if string(sd) != "aes-20170501-30-1000" {
-		t.Log(sd)
+		t.Log(string(sd))
 		t.FailNow()
 	}
 }
 
-func TestAeCBCDecrypt(t *testing.T) {
+func TestAesCBCDecrypt(t *testing.T) {
 	err := SetAesKey("nanjishidu170502")
 	if err != nil {
 		t.Fatal(err)
@@ -43,8 +46,34 @@ func TestAeCBCDecrypt(t *testing.T) {
 		t.Fatal(err)
 	}
 	sd, err := AesCBCDecrypt(sed)
+	if err != nil {
+		t.Fatal(err)
+	}
 	if string(sd) != "aes-20170501-30-1002" {
-		t.Log(sd)
+		t.Log(string(sd))
+		t.FailNow()
+	}
+}
+func TestAesECBDecrypt(t *testing.T) {
+	err := SetAesKey("nanjishidu170502")
+	if err != nil {
+		t.Fatal(err)
+	}
+	se, err := AesECBEncrypt([]byte("exampleplaintext"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	s := base64.StdEncoding.EncodeToString(se)
+	sed, err := base64.StdEncoding.DecodeString(s)
+	if err != nil {
+		t.Fatal(err)
+	}
+	sd, err := AesECBDecrypt(sed)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(sd) != "exampleplaintext" {
+		t.Log(string(sd))
 		t.FailNow()
 	}
 }

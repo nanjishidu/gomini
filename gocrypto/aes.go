@@ -135,3 +135,32 @@ func AesCBCDecrypt(ciphertext []byte, paddingType ...string) (plaintext []byte,
 	}
 	return plaintext, nil
 }
+
+func AesECBEncrypt(plaintext []byte) ([]byte, error) {
+	if len(plaintext)%aes.BlockSize != 0 {
+		return nil, errors.New("plaintext is not a multiple of the block size")
+	}
+	block, err := aes.NewCipher(commonAeskey)
+	if err != nil {
+		return nil, err
+	}
+	mode := NewECBEncrypter(block)
+	mode.CryptBlocks(plaintext, plaintext)
+	return plaintext, nil
+}
+
+func AesECBDecrypt(ciphertext []byte) ([]byte, error) {
+	if len(ciphertext) < aes.BlockSize {
+		return nil, errors.New("ciphertext too short")
+	}
+	// ECB mode always works in whole blocks.
+	if len(ciphertext)%aes.BlockSize != 0 {
+		return nil, errors.New("ciphertext is not a multiple of the block size")
+	}
+	block, err := aes.NewCipher(commonAeskey)
+	if err != nil {
+		return nil, err
+	}
+	NewECBDecrypter(block).CryptBlocks(ciphertext, ciphertext)
+	return ciphertext, nil
+}
