@@ -136,7 +136,17 @@ func AesCBCDecrypt(ciphertext []byte, paddingType ...string) (plaintext []byte,
 	return plaintext, nil
 }
 
-func AesECBEncrypt(plaintext []byte) ([]byte, error) {
+func AesECBEncrypt(plaintext []byte, paddingType ...string) (ciphertext []byte, err error) {
+	if len(paddingType) > 0 {
+		switch paddingType[0] {
+		case "ZeroPadding":
+			plaintext = ZeroPadding(plaintext, aes.BlockSize)
+		case "PKCS5Padding":
+			plaintext = PKCS5Padding(plaintext, aes.BlockSize)
+		}
+	} else {
+		plaintext = PKCS5Padding(plaintext, aes.BlockSize)
+	}
 	if len(plaintext)%aes.BlockSize != 0 {
 		return nil, errors.New("plaintext is not a multiple of the block size")
 	}
@@ -144,12 +154,12 @@ func AesECBEncrypt(plaintext []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	mode := NewECBEncrypter(block)
-	mode.CryptBlocks(plaintext, plaintext)
-	return plaintext, nil
+	ciphertext = make([]byte, len(plaintext))
+	NewECBEncrypter(block).CryptBlocks(ciphertext, plaintext)
+	return ciphertext, nil
 }
 
-func AesECBDecrypt(ciphertext []byte) ([]byte, error) {
+func AesECBDecrypt(ciphertext []byte, paddingType ...string) (plaintext []byte, err error) {
 	if len(ciphertext) < aes.BlockSize {
 		return nil, errors.New("ciphertext too short")
 	}
@@ -162,5 +172,15 @@ func AesECBDecrypt(ciphertext []byte) ([]byte, error) {
 		return nil, err
 	}
 	NewECBDecrypter(block).CryptBlocks(ciphertext, ciphertext)
-	return ciphertext, nil
+	if len(paddingType) > 0 {
+		switch paddingType[0] {
+		case "ZeroUnPadding":
+			plaintext = ZeroUnPadding(ciphertext)
+		case "PKCS5UnPadding":
+			plaintext = PKCS5UnPadding(ciphertext)
+		}
+	} else {
+		plaintext = PKCS5UnPadding(ciphertext)
+	}
+	return plaintext, nil
 }

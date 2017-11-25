@@ -59,7 +59,7 @@ func TestAesECBDecrypt(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	se, err := AesECBEncrypt([]byte("exampleplaintext"))
+	se, err := AesECBEncrypt([]byte("exampleplaintex2222t2"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -72,7 +72,7 @@ func TestAesECBDecrypt(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if string(sd) != "exampleplaintext" {
+	if string(sd) != "exampleplaintex2222t2" {
 		t.Log(string(sd))
 		t.FailNow()
 	}
