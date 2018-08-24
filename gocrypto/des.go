@@ -24,8 +24,7 @@ func SetDesKey(key string) error {
 		commonDeskey = b
 		return nil
 	}
-	return errors.New(fmt.Sprintf("key size is not 8 or 24, but %d",
-		len(b)))
+	return fmt.Errorf("key size is not 8 or 24, but %d", len(b))
 }
 
 func DesCBCEncrypt(plaintext []byte, paddingType ...string) (ciphertext []byte,

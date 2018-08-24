@@ -5,7 +5,6 @@ import (
 	"errors"
 	"os/exec"
 	"time"
-	//"log"
 )
 
 func Exec(bin string, args ...string) (string, error) {
@@ -44,9 +43,8 @@ func CmdRunWithTimeout(cmd *exec.Cmd, timeout time.Duration) (error, bool) {
 	var err error
 	select {
 	case <-time.After(timeout):
-		// timeout
 		<-done
-		err := cmd.Process.Kill()
+		err = cmd.Process.Kill()
 		if err != nil {
 			return err, true
 		}

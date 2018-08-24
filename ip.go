@@ -67,7 +67,7 @@ func GetIpAddrs(ipaddr, mask string, ok bool) (ipNetmask *IpNetmask, ipRangeAddr
 
 }
 
-//判断IP地址是否为预留ip
+// 判断IP地址是否为预留ip
 func IsPrivateIP(ip string) bool {
 	ip2long := Ip2long(ip)
 	net_a := Ip2long("10.255.255.255") >> 24

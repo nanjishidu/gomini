@@ -42,3 +42,19 @@ func Uniq(s []string) (r []string) {
 	}
 	return
 }
+func InSlice(s []string, a string) bool {
+	for i := 0; i < len(s); i++ {
+		if s[i] == a {
+			return true
+		}
+	}
+	return false
+}
+func AddInt64(s []int64, a int64) []int64 {
+	for _, existing := range s {
+		if a == existing {
+			return s
+		}
+	}
+	return append(s, a)
+}

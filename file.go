@@ -30,7 +30,7 @@ func Remove(file string) error {
 }
 
 // RemoveAll删除path指定的文件，或目录及它包含的任何下级对象。它会尝试删除所有东西，除非遇到错误并返回。
-//如果path指定的对象不存在，RemoveAll会返回nil而不返回错误。
+// 如果path指定的对象不存在，RemoveAll会返回nil而不返回错误。
 func RemoveAll(path string) error {
 	return os.RemoveAll(path)
 }
@@ -77,7 +77,7 @@ func IsExist(path string) bool {
 	return err == nil || os.IsExist(err)
 }
 
-//create dir
+// create dir
 func Mkdir(src string) error {
 	if IsExist(src) {
 		return nil
@@ -111,7 +111,7 @@ func (r FileRepos) Swap(i, j int) {
 	r[i], r[j] = r[j], r[i]
 }
 
-//如果文件达到最上限，按时间删除
+// 如果文件达到最上限，按时间删除
 func DelFile(files []os.FileInfo, count int, fileDir string) {
 	if len(files) <= count {
 		return

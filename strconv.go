@@ -33,6 +33,7 @@ func GetStrInt(strv string, def ...int) (int, error) {
 	a, err := strconv.Atoi(strv)
 	return int(a), err
 }
+
 func GetStrInt8(strv string, def ...int8) (int8, error) {
 	if len(strv) == 0 && len(def) > 0 {
 		return def[0], nil
@@ -48,6 +49,7 @@ func GetStrUint8(strv string, def ...uint8) (uint8, error) {
 	ret, err := strconv.ParseUint(strv, 10, 8)
 	return uint8(ret), err
 }
+
 func GetStrInt16(strv string, def ...int16) (int16, error) {
 	if len(strv) == 0 && len(def) > 0 {
 		return def[0], nil
@@ -55,6 +57,7 @@ func GetStrInt16(strv string, def ...int16) (int16, error) {
 	a, err := strconv.ParseInt(strv, 10, 16)
 	return int16(a), err
 }
+
 func GetStrUint16(strv string, def ...uint16) (uint16, error) {
 	if len(strv) == 0 && len(def) > 0 {
 		return def[0], nil
@@ -62,6 +65,7 @@ func GetStrUint16(strv string, def ...uint16) (uint16, error) {
 	ret, err := strconv.ParseUint(strv, 10, 16)
 	return uint16(ret), err
 }
+
 func GetStrInt32(strv string, def ...int32) (int32, error) {
 	if len(strv) == 0 && len(def) > 0 {
 		return def[0], nil
@@ -69,6 +73,7 @@ func GetStrInt32(strv string, def ...int32) (int32, error) {
 	a, err := strconv.ParseInt(strv, 10, 32)
 	return int32(a), err
 }
+
 func GetStrUint32(strv string, def ...uint32) (uint32, error) {
 	if len(strv) == 0 && len(def) > 0 {
 		return def[0], nil
@@ -76,7 +81,6 @@ func GetStrUint32(strv string, def ...uint32) (uint32, error) {
 	ret, err := strconv.ParseUint(strv, 10, 32)
 	return uint32(ret), err
 }
-
 func GetStrInt64(strv string, def ...int64) (int64, error) {
 	if len(strv) == 0 && len(def) > 0 {
 		return def[0], nil
@@ -84,6 +88,7 @@ func GetStrInt64(strv string, def ...int64) (int64, error) {
 	ret, err := strconv.ParseInt(strv, 10, 64)
 	return ret, err
 }
+
 func GetStrUint64(strv string, def ...uint64) (uint64, error) {
 	if len(strv) == 0 && len(def) > 0 {
 		return def[0], nil
@@ -91,6 +96,7 @@ func GetStrUint64(strv string, def ...uint64) (uint64, error) {
 	ret, err := strconv.ParseUint(strv, 10, 64)
 	return ret, err
 }
+
 func GetStrFloat64(strv string, def ...float64) (float64, error) {
 	if len(strv) == 0 && len(def) > 0 {
 		return def[0], nil
@@ -105,6 +111,30 @@ func GetUint64Str(d uint64) string {
 
 func GetInt64Str(d int64) string {
 	return strconv.FormatInt(d, 10)
+}
+
+func GetUint32Str(d uint32) string {
+	return strconv.Itoa(int(d))
+}
+
+func GetInt32Str(d int32) string {
+	return strconv.Itoa(int(d))
+}
+
+func GetUint16Str(d uint16) string {
+	return strconv.Itoa(int(d))
+}
+
+func GetInt16Str(d int16) string {
+	return strconv.Itoa(int(d))
+}
+
+func GetUint8Str(d uint8) string {
+	return strconv.Itoa(int(d))
+}
+
+func GetInt8Str(d int8) string {
+	return strconv.Itoa(int(d))
 }
 
 func GetUintStr(d uint) string {

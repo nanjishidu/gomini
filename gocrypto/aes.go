@@ -24,8 +24,7 @@ func SetAesKey(key string) (err error) {
 		commonAeskey = b
 		return nil
 	}
-	return errors.New(fmt.Sprintf("key size is not 16 or 24 or 32, but %d",
-		len(b)))
+	return fmt.Errorf("key size is not 16 or 24 or 32, but %d", len(b))
 
 }
 func AesCFBEncrypt(plaintext []byte, paddingType ...string) (ciphertext []byte,
