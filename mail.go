@@ -42,18 +42,32 @@ func (m *Mail) SetMessage(params map[string]interface{}) {
 	if v, ok := params["cc"]; ok {
 		msg.SetHeader("Cc", v.([]string)...)
 	}
+	if v, ok := params["bcc"]; ok {
+		msg.SetHeader("BCc", v.([]string)...)
+	}
+	if v, ok := params["x-to"]; ok {
+		msg.SetHeader("X-To", v.([]string)...)
+	}
 	if v, ok := params["subject"]; ok {
 		msg.SetHeader("Subject", v.(string))
 	}
-	if v, ok := params["text"]; ok {
-		msg.SetBody("text/html", v.(string))
+	if v, ok := params["plain"]; ok {
+		msg.SetBody("text/plain", v.(string))
 	}
 	if v, ok := params["html"]; ok {
 		msg.SetBody("text/html", v.(string))
 	}
-	if v, ok := params["attachFile"]; ok {
+	if v, ok := params["alternative"]; ok {
+		msg.AddAlternative("text/html", v.(string))
+	}
+	if v, ok := params["attach"]; ok {
 		for _, v2 := range v.([]string) {
 			msg.Attach(v2)
+		}
+	}
+	if v, ok := params["embed"]; ok {
+		for _, v2 := range v.([]string) {
+			msg.Embed(v2)
 		}
 	}
 	m.messageChan <- msg
