@@ -21,7 +21,6 @@ type IpNetmask struct {
 // 第2步，计算出该二进制的位数为10位，即n = 10
 // 第3步，将255.255.255.255从后向前的10位全部置“0”,得到的二进制数为“11111111.11111111.11111100.00000000”，
 // 转换成十进制后即为255.255.252.0，这就是该要划分成主机数为700的B类IP地址 168.195.0.0的子网掩码。
-
 func GetIpMask(start, end string) string {
 	sip, eip := Ip2long(start), Ip2long(end)
 	s := strconv.FormatInt(int64(eip-sip), 2)

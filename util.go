@@ -1,6 +1,8 @@
-// util.go
 package gomini
 
+import "strings"
+
+// 字符串截取
 func Substr(s string, start, length int) string {
 	bt := []rune(s)
 	if start < 0 {
@@ -16,4 +18,22 @@ func Substr(s string, start, length int) string {
 		end = start + length
 	}
 	return string(bt[start:end])
+}
+
+// Repeat("?",10,",")
+// ?,?,?,?,?,?,?,?,?,?
+func Repeat(s string, count int, sep ...string) string {
+	var (
+		sep2   string
+		fields []string
+	)
+	if len(sep) > 0 {
+		sep2 = sep[0]
+	} else {
+		sep2 = ","
+	}
+	for i := 0; i < count; i++ {
+		fields = append(fields, s)
+	}
+	return strings.Join(fields, sep2)
 }
