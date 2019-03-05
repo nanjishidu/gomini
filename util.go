@@ -37,3 +37,15 @@ func Repeat(s string, count int, sep ...string) string {
 	}
 	return strings.Join(fields, sep2)
 }
+
+//Excel 转化
+func ConvertToLetter(iCol int) string {
+	if iCol <= 0 {
+		return ""
+	}
+	if iCol <= 26 {
+		return string(rune(iCol - 1 + 'A'))
+	}
+	iCol--
+	return string(rune(iCol/26%26-1+'A')) + string(rune(iCol%26+'A'))
+}

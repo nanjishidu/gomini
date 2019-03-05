@@ -22,6 +22,11 @@ import (
 
 var alphaNum = []byte(`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`)
 
+// 随机码
+func GetRandomNumber(n int) string {
+	return string(RandomCreateBytes(n, []byte(`0123456789`)...))
+}
+
 // RandomCreateBytes generate random []byte by specify chars.
 func RandomCreateBytes(n int, alphabets ...byte) []byte {
 	if len(alphabets) == 0 {
