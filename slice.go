@@ -1,4 +1,4 @@
-package stringy
+package gomini
 
 //https://github.com/nsqio/nsq/blob/master/internal/stringy/slice.go
 func Add(s []string, a string) []string {
