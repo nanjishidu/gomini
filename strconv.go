@@ -145,7 +145,7 @@ func GetIntStr(d int) string {
 	return strconv.Itoa(d)
 }
 
-func GetFloatStr(f float32) string {
+func GetFloatStr(f float64) string {
 	return strconv.FormatFloat(f, 'g', -1, 32)
 }
 
