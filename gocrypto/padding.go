@@ -4,7 +4,11 @@ package gocrypto
 import "bytes"
 
 func ZeroPadding(ciphertext []byte, blockSize int) []byte {
-	padding := blockSize - len(ciphertext)%blockSize
+	padding :=0
+	if len(ciphertext)%blockSize>0{
+		padding = blockSize - len(ciphertext)%blockSize
+	}
+//modified by ken
 	padtext := bytes.Repeat([]byte{0}, padding)
 	return append(ciphertext, padtext...)
 }
