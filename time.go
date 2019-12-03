@@ -5,6 +5,18 @@ import (
 	"time"
 )
 
+var WeekdayString = []string{"周日", "周一", "周二", "周三", "周四", "周五", "周六"}
+
+// 获取周一到周日
+func GetWeekdayCnName(layout string, value string) (int, string, error) {
+	tpDate, err := time.ParseInLocation(layout, value, time.Local)
+	if err != nil {
+		return 0, "", err
+	}
+	weekdayNum := int(tpDate.Weekday())
+	return weekdayNum, WeekdayString[weekdayNum], nil
+}
+
 func WebTime(t time.Time) string {
 	ftime := t.Format(time.RFC1123)
 	if strings.HasSuffix(ftime, "UTC") {
