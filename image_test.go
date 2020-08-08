@@ -9,7 +9,6 @@ func TestConvertBase64ToImage(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Log(str)
 	if str != `src="http://127.0.0.1/static/201808/5b5fadbc13389e93cf72502dec1208b9.png"` {
 		t.FailNow()
 	}

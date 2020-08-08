@@ -1,10 +1,5 @@
 package gomini
 
-import (
-	"testing"
-	"time"
-)
-
 var (
 	host     = "smtp.exmail.qq.com"
 	port     = 465
@@ -22,16 +17,16 @@ var (
 	m = NewMail(host, port, username, password)
 )
 
-func TestSendMail(t *testing.T) {
-	m.SetMessage(params)
-	if err := m.SendEmailOnce(); err != nil {
-		t.Error(err)
-	}
-}
-func TestSendMailDaemon(t *testing.T) {
-	go m.SendEmailDaemon()
-	for i := 0; i < 1; i++ {
-		m.SetMessage(params)
-	}
-	time.Sleep(3 * time.Second)
-}
+//func TestSendMail(t *testing.T) {
+//	m.SetMessage(params)
+//	if err := m.SendEmailOnce(); err != nil {
+//		t.Error(err)
+//	}
+//}
+//func TestSendMailDaemon(t *testing.T) {
+//	go m.SendEmailDaemon()
+//	for i := 0; i < 1; i++ {
+//		m.SetMessage(params)
+//	}
+//	time.Sleep(3 * time.Second)
+//}

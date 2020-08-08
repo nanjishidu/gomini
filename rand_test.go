@@ -19,9 +19,8 @@ import "testing"
 func TestRand_01(t *testing.T) {
 	bs0 := RandomCreateBytes(16)
 	bs1 := RandomCreateBytes(16)
-
-	t.Log(string(bs0), string(bs1))
 	if string(bs0) == string(bs1) {
+		t.Log(string(bs0), string(bs1))
 		t.FailNow()
 	}
 
@@ -34,6 +33,5 @@ func TestRand_01(t *testing.T) {
 func BenchmarkRand_01(b *testing.B) {
 	for i := 0; i < b.N; i++ { //use b.N for looping
 		RandomCreateBytes(16)
-
 	}
 }
