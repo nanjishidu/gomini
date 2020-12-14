@@ -1,6 +1,8 @@
 package gomini
 
-import "strings"
+import (
+	"strings"
+)
 
 // 字符串截取
 func Substr(s string, start, length int) string {
