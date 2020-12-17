@@ -28,17 +28,14 @@ func Union(s []string, a []string) []string {
 }
 
 func Uniq(s []string) (r []string) {
+outerLoop:
 	for _, entry := range s {
-		found := false
 		for _, existing := range r {
 			if existing == entry {
-				found = true
-				break
+				continue outerLoop
 			}
 		}
-		if !found {
-			r = append(r, entry)
-		}
+		r = append(r, entry)
 	}
 	return
 }
@@ -68,31 +65,4 @@ func InSlice(s []string, a string) bool {
 		}
 	}
 	return false
-}
-
-func IntsToInterfaces(s []int) (i []interface{}) {
-	for _, v := range s {
-		i = append(i, v)
-	}
-	return i
-}
-
-func Int64sToInterfaces(s []int64) (i []interface{}) {
-	for _, v := range s {
-		i = append(i, v)
-	}
-	return i
-}
-func IntsToInt64s(s []int) (i []int64) {
-	for _, v := range s {
-		i = append(i, int64(v))
-	}
-	return i
-}
-
-func StringsToInterfaces(s []string) (i []interface{}) {
-	for _, v := range s {
-		i = append(i, v)
-	}
-	return i
 }
