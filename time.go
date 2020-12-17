@@ -3,13 +3,15 @@ package gomini
 import (
 	"strings"
 	"time"
+
+	"github.com/jinzhu/now"
 )
 
 var WeekdayString = []string{"周日", "周一", "周二", "周三", "周四", "周五", "周六"}
 
 // 获取周一到周日
-func GetWeekdayCnName(layout string, value string) (int, string, error) {
-	tpDate, err := time.ParseInLocation(layout, value, time.Local)
+func GetWeekdayCnName(value string) (int, string, error) {
+	tpDate, err := now.ParseInLocation(time.Local, value)
 	if err != nil {
 		return 0, "", err
 	}
@@ -46,6 +48,5 @@ func GetTimeAgo(t int64) (s string) {
 		m := tt / (2592000 * 12)
 		s = GetInt64Str(m) + "年以前"
 	}
-
 	return
 }
