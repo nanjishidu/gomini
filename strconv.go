@@ -105,6 +105,7 @@ func GetUint64Str(d uint64) string {
 	return cast.ToString(d)
 }
 
+
 func GetInt64Str(d int64) string {
 	return cast.ToString(d)
 }
@@ -151,4 +152,8 @@ func GetFloat32Str(f float32) string {
 
 func GetFloat64Str(f float64) string {
 	return cast.ToString(f)
+}
+
+func GetInt64Float(d int64) float64 {
+	return cast.ToFloat64(d)
 }
