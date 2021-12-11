@@ -7,15 +7,15 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
+	"io/ioutil"
 	"os"
 )
 
 //openssl genrsa -out private.pem 1024
 //openssl rsa -in private.pem -pubout -out public.pem
-
 func GenRsaKey(bits int, pemFile ...string) error {
-	var privatePem, publicPem = "private.pem","public.pem"
-	if len(pemFile)>=2{
+	var privatePem, publicPem = "private.pem", "public.pem"
+	if len(pemFile) >= 2 {
 		privatePem = pemFile[0]
 		publicPem = pemFile[1]
 	}
@@ -58,10 +58,10 @@ func GenRsaKey(bits int, pemFile ...string) error {
 
 func RSAEncrypt(data []byte, publicPem ...string) ([]byte, error) {
 	var publicPemPath = "public.pem"
-	if len(publicPem)>= 1 {
+	if len(publicPem) >= 1 {
 		publicPemPath = publicPem[0]
 	}
-	publicKey, err := readFileBytes(publicPemPath)
+	publicKey, err := readFile(publicPemPath)
 	if err != nil {
 		return nil, err
 	}
@@ -76,11 +76,11 @@ func RSAEncrypt(data []byte, publicPem ...string) ([]byte, error) {
 	return rsa.EncryptPKCS1v15(rand.Reader, pubInterface.(*rsa.PublicKey), data)
 }
 func RSADecrypt(data []byte, privatePem ...string) ([]byte, error) {
-	var privatePemPath  = "private.pem"
+	var privatePemPath = "private.pem"
 	if len(privatePem) >= 1 {
 		privatePemPath = privatePem[0]
 	}
-	privateKey, err := readFileBytes(privatePemPath)
+	privateKey, err := readFile(privatePemPath)
 	if err != nil {
 		return nil, err
 	}
@@ -95,3 +95,11 @@ func RSADecrypt(data []byte, privatePem ...string) ([]byte, error) {
 	return rsa.DecryptPKCS1v15(rand.Reader, priv, data)
 }
 
+func readFile(path string) ([]byte, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	return ioutil.ReadAll(f)
+}

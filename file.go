@@ -15,7 +15,7 @@ func FileMTime(file string) (int64, error) {
 	return f.ModTime().Unix(), nil
 }
 
-// get file size as how many bytes
+// get file size
 func FileSize(file string) (int64, error) {
 	f, e := os.Stat(file)
 	if e != nil {
@@ -50,7 +50,7 @@ func FilePutContent(file string, content string) (int, error) {
 	return fs.WriteString(content)
 }
 
-// get string from text file
+// get string from file
 func FileGetContent(file string) (string, error) {
 	if !IsFile(file) {
 		return "", os.ErrNotExist
@@ -83,9 +83,9 @@ func Mkdir(src string) error {
 		return nil
 	}
 
-	if err := os.MkdirAll(src, 0777); err != nil {
-		if os.IsPermission(err) {
-		}
+	if err := os.MkdirAll(src, 0770); err != nil {
+		// if os.IsPermission(err) {
+		// }
 		return err
 	}
 
@@ -136,5 +136,4 @@ func DelFile(files []os.FileInfo, count int, fileDir string) {
 		Remove(fileDir + v.Name)
 	}
 
-	return
 }

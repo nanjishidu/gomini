@@ -2,14 +2,11 @@ package gomini
 
 import "math"
 
-// 地球半径
-const earthRadius = 6378137
+const earthRadius = 6378137 // 地球半径
 
 type GeoPosition struct {
-	// Longitude 经度
-	Longitude float64
-	// Latitude 纬度
-	Latitude float64
+	Longitude float64 //经度
+	Latitude  float64 //纬度
 }
 
 func rad(d float64) float64 {
@@ -22,9 +19,7 @@ func GeoPositionToDistance(from, to GeoPosition) int {
 	radLat2 := rad(to.Latitude)
 	a := radLat1 - radLat2
 	b := rad(from.Longitude) - rad(to.Longitude)
-	s := 2.0 * math.Asin(math.Sqrt(math.Pow(math.Sin(a/2), 2)+
-		math.Cos(radLat1)*math.Cos(radLat2)*math.Pow(math.Sin(b/2), 2)))
-	s = s * earthRadius
+	s := 2.0 * math.Asin(math.Sqrt(math.Pow(math.Sin(a/2), 2)+math.Cos(radLat1)*math.Cos(radLat2)*math.Pow(math.Sin(b/2), 2))) * earthRadius
 	s = math.Floor(s*100) / 100
 	return int(s)
 }

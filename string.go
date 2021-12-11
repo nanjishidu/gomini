@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-// 字符串截取
+// substr
 func Substr(s string, start, length int) string {
 	bt := []rune(s)
 	if start < 0 {
@@ -22,8 +22,7 @@ func Substr(s string, start, length int) string {
 	return string(bt[start:end])
 }
 
-// Repeat("?",10,",")
-// ?,?,?,?,?,?,?,?,?,?
+// repeat
 func Repeat(s string, count int, sep ...string) string {
 	var (
 		sep2   string
@@ -40,7 +39,7 @@ func Repeat(s string, count int, sep ...string) string {
 	return strings.Join(fields, sep2)
 }
 
-//Excel 转化
+// convert to letter
 func ConvertToLetter(iCol int) string {
 	if iCol <= 0 {
 		return ""

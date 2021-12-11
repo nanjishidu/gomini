@@ -27,6 +27,7 @@ func GetRandomNumber(n int) string {
 	return string(RandomCreateBytes(n, []byte(`0123456789`)...))
 }
 
+// https://github.com/beego/beego/blob/develop/core/utils/rand.go
 // RandomCreateBytes generate random []byte by specify chars.
 func RandomCreateBytes(n int, alphabets ...byte) []byte {
 	if len(alphabets) == 0 {

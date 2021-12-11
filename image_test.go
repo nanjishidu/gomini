@@ -5,11 +5,11 @@ import (
 )
 
 func TestConvertBase64ToImage(t *testing.T) {
-	str, err := ConvertBase64ToImage(content, "/tmp/201808", "http://127.0.0.1/static/201808")
+	str, err := ConvertBase64ToImage(content, "/tmp/201808", "/static/201808")
 	if err != nil {
 		t.Fatal(err)
 	}
-	if str != `src="http://127.0.0.1/static/201808/5b5fadbc13389e93cf72502dec1208b9.png"` {
+	if str != `src="/static/201808/5b5fadbc13389e93cf72502dec1208b9.png"` {
 		t.FailNow()
 	}
 }

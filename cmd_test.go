@@ -1,18 +1,19 @@
 package gomini
 
-//func TestExec(t *testing.T) {
-//	out, err := Exec("ls", "-al")
-//	t.Log(string(out))
-//	if err != nil {
-//		t.Error(err)
-//		t.FailNow()
-//	}
-//}
-//func TestExecWithTimeout(t *testing.T) {
-//	out, err := ExecWithTimeout("ls", 3*time.Second, "-al")
-//	t.Log(string(out))
-//	if err != nil {
-//		t.Error(err)
-//		t.FailNow()
-//	}
-//}
+import (
+	"testing"
+	"time"
+)
+
+func TestExec(t *testing.T) {
+	_, err := Exec("ping", "8.8.8.8")
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+func TestExecWithTimeout(t *testing.T) {
+	_, err := ExecWithTimeout("ping", 5*time.Second, "8.8.8.8")
+	if err != nil {
+		t.Fatal(err)
+	}
+}

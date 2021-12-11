@@ -17,8 +17,7 @@ func TestDecimalAddToFloat(t *testing.T) {
 	for _, v := range float64Slice {
 		f := DecimalAddToFloat(v[0], v[1], 3)
 		if f != v[2] {
-			t.Log(f, v[2])
-			t.FailNow()
+			t.Fatal(f, v[2])
 		}
 	}
 }
@@ -38,8 +37,7 @@ func TestDecimalSubToFloat(t *testing.T) {
 	for _, v := range float64Slice {
 		f := DecimalSubToFloat(v[0], v[1], 3)
 		if f != v[2] {
-			t.Log(f, v[2])
-			t.FailNow()
+			t.Fatal(f, v[2])
 		}
 	}
 }

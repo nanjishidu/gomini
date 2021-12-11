@@ -23,7 +23,6 @@ func PKCS5Padding(ciphertext []byte, blockSize int) []byte {
 
 func PKCS5UnPadding(origData []byte) []byte {
 	length := len(origData)
-	// 去掉最后一个字节 unpadding 次
 	unpadding := int(origData[length-1])
 	return origData[:(length - unpadding)]
 }
