@@ -1,4 +1,4 @@
-module gomini
+module github.com/nanjishidu/gomini
 
 go 1.17
 
